@@ -26,6 +26,9 @@ export class UsersService {
       where: {
         id,
       },
+      include: {
+        order: true,
+      },
     });
 
     if (!user) {

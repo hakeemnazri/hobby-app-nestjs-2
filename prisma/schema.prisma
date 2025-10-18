@@ -8,13 +8,33 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
+  id       Int     @id @default(autoincrement())
   name     String
-  email    String @unique
-  phone    String @unique
-  password String @unique
+  email    String  @unique
+  phone    String  @unique
+  password String  @unique
+  order    Order[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
+}
+
+model Order {
+  id        Int         @id @default(autoincrement())
+  status    OrderStatus
+  userId    Int
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  deletedAt DateTime?
+  User      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum OrderStatus {
+  AWAITING_PAYMENT
+  AWAITING_SHIPMENT
+  SHIPPED
+  IN_TRANSIT
+  COMPLETED
+  CANCELED
 }
