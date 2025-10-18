@@ -1,26 +1,75 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { DEFAULT_PAGE_SIZE } from 'common/utils/common.constants';
+import { PrismaService } from 'nestjs-prisma';
+import { PaginationDto } from '../../common/dtos/pagination.dto';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 
 @Injectable()
 export class ProductsService {
-  create(createProductDto: CreateProductDto) {
-    return 'This action adds a new product';
+  constructor(private readonly prisma: PrismaService) {}
+  async create(createProductDto: CreateProductDto) {
+    return await this.prisma.product.create({
+      data: {
+        name: createProductDto.name,
+        description: createProductDto.description,
+        price: createProductDto.price,
+        categories: {
+          connect: createProductDto.categories?.map((id) => ({ id })),
+        },
+      },
+    });
   }
 
-  findAll() {
-    return `This action returns all products`;
+  async findAll(paginationDto: PaginationDto) {
+    return await this.prisma.product.findMany({
+      skip: (paginationDto.page - 1) * paginationDto.limit,
+      take: paginationDto.limit ?? DEFAULT_PAGE_SIZE.USERS,
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(id: number) {
+    const product = await this.prisma.product.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        categories: true,
+      },
+    });
+
+    if (!product) {
+      throw new NotFoundException('product not found');
+    }
+
+    return product;
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  async update(id: number, updateProductDto: UpdateProductDto) {
+    const product = await this.prisma.product.update({
+      where: {
+        id,
+      },
+      data: {
+        ...updateProductDto,
+        categories: {
+          connect: updateProductDto.categories?.map((id) => ({ id })),
+        },
+      },
+    });
+
+    if (!product) {
+      throw new NotFoundException('product not found');
+    }
+
+    return product;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(id: number) {
+    return this.prisma.product.delete({
+      where: {
+        id,
+      },
+    });
   }
 }
