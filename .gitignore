@@ -57,3 +57,5 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 #vs code config
 /.vscode
+
+/src/generated/prisma
