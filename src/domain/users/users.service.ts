@@ -27,7 +27,7 @@ export class UsersService {
         id,
       },
       include: {
-        order: true,
+        orders: true,
       },
     });
 
