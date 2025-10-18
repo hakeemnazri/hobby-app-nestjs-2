@@ -1,12 +1,25 @@
-version: '3.8'
+version: "3.8"
 services:
   nest-api:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: nest-api
     restart: always
     ports:
-      - '3000:3000'
+      - "3000:3000"
     env_file:
       - .env
+
+  database:
+    image: postgres:14
+    restart: always
+    ports:
+      - "5436:5432"
+    env_file:
+      - .env
+    volumes:
+      - nestjs-hobby-app-2:/var/lib/postgresql/data
+
+volumes:
+  nestjs-hobby-app-2:
+    name: nestjs-hobby-app-2
