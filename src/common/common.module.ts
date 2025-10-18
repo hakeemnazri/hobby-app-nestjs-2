@@ -10,7 +10,7 @@ import { APP_PIPE } from '@nestjs/core';
         forbidNonWhitelisted: true, //give warning
         transform: true, // logs in console of the dto
         transformOptions: {
-          enableImplicitConversion: true,
+          enableImplicitConversion: true, //validation will transform to the right type then it will be validated
         },
       }),
     },
