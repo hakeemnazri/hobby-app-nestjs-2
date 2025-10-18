@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DEFAULT_PAGE_SIZE } from 'common/util/common.constants';
+import { DEFAULT_PAGE_SIZE } from 'common/utils/common.constants';
 import { PrismaService } from 'nestjs-prisma';
-import { PaginationDto } from './../../common/dto/pagination.dto';
+import { PaginationDto } from '../../common/dtos/pagination.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
