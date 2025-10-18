@@ -8,3 +8,7 @@ export const VALIDATION_PIPE_OPTIONS: ValidationPipeOptions = {
     enableImplicitConversion: true, //validation will transform to the right type then it will be validated
   },
 };
+
+export const DEFAULT_PAGE_SIZE = {
+  USERS: 10,
+} as const satisfies Record<string, number>;

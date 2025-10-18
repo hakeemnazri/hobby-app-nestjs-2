@@ -1,5 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { DEFAULT_PAGE_SIZE } from 'common/util/common.constants';
 import { PrismaService } from 'nestjs-prisma';
+import { PaginationDto } from './../../common/dto/pagination.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
@@ -12,8 +14,11 @@ export class UsersService {
     });
   }
 
-  async findAll() {
-    return await this.prisma.user.findMany();
+  async findAll(paginationDto: PaginationDto) {
+    return await this.prisma.user.findMany({
+      skip: (paginationDto.page - 1) * paginationDto.limit,
+      take: paginationDto.limit ?? DEFAULT_PAGE_SIZE.USERS,
+    });
   }
 
   async findOne(id: number) {
