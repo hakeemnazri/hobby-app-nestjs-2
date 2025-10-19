@@ -15,7 +15,7 @@ export class ProductsService {
         description: createProductDto.description,
         price: createProductDto.price,
         categories: {
-          connect: createProductDto.categories?.map((id) => ({ id })),
+          connect: createProductDto.categories,
         },
       },
     });
@@ -53,7 +53,7 @@ export class ProductsService {
       data: {
         ...updateProductDto,
         categories: {
-          connect: updateProductDto.categories?.map((id) => ({ id })),
+          connect: updateProductDto.categories,
         },
       },
     });
