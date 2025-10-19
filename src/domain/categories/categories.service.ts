@@ -16,7 +16,9 @@ export class CategoriesService {
 
   async findAll(paginationDto: PaginationDto) {
     return await this.prisma.category.findMany({
-      skip: (paginationDto.page - 1) * paginationDto.limit,
+      skip:
+        (paginationDto.page - 1) *
+        (paginationDto.limit ?? DEFAULT_PAGE_SIZE.USERS),
       take: paginationDto.limit ?? DEFAULT_PAGE_SIZE.USERS,
     });
   }

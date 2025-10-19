@@ -6,7 +6,7 @@ import {
   Length,
   Min,
 } from 'class-validator';
-import { IsEntity } from 'common/decorators/is-entity.decorator';
+import { IsEntity } from 'common/decorators/validators/is-entity.decorator';
 import { IdDto } from 'common/dtos/id.dto';
 import { IdentifierFn } from 'common/utils/id.util';
 

@@ -1,4 +1,4 @@
-import { IsCardinal } from './../decorators/is-cardinal.decorators';
+import { IsCardinal } from '../decorators/validators/is-cardinal.decorator';
 export class IdDto {
   @IsCardinal()
   readonly id: number;
