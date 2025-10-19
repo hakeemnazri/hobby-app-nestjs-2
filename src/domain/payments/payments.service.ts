@@ -1,26 +1,52 @@
-import { Injectable } from '@nestjs/common';
-import { CreatePaymentDto } from './dto/create-payment.dto';
-import { UpdatePaymentDto } from './dto/update-payment.dto';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { OrderStatus } from '@prisma/client';
+import { PrismaService } from 'nestjs-prisma';
 
 @Injectable()
 export class PaymentsService {
-  create(createPaymentDto: CreatePaymentDto) {
-    return 'This action adds a new payment';
-  }
+  constructor(private readonly prisma: PrismaService) {}
+  async payOrder(id: number) {
+    const order = await this.prisma.order.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        payment: true,
+      },
+    });
 
-  findAll() {
-    return `This action returns all payments`;
-  }
+    if (!order) {
+      throw new NotFoundException('Order not found');
+    }
 
-  findOne(id: number) {
-    return `This action returns a #${id} payment`;
-  }
+    if (order.payment) {
+      throw new ConflictException('Order already paid');
+    }
 
-  update(id: number, updatePaymentDto: UpdatePaymentDto) {
-    return `This action updates a #${id} payment`;
-  }
+    const payment = await this.prisma.payment.create({
+      data: {
+        orderId: order.id,
+      },
+    });
 
-  remove(id: number) {
-    return `This action removes a #${id} payment`;
+    const updatedOrder = await this.prisma.order.update({
+      where: {
+        id: order.id,
+      },
+      data: {
+        status: OrderStatus.AWAITING_SHIPMENT,
+        payment: {
+          connect: {
+            id: payment.id,
+          },
+        },
+      },
+    });
+
+    return updatedOrder;
   }
 }

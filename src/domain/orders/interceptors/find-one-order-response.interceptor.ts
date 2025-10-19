@@ -4,20 +4,8 @@ import {
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { IOrder } from 'orders/interfaces/order-find-one-response.interface';
 import { map, Observable } from 'rxjs';
-
-type IOrder = Prisma.OrderGetPayload<{
-  include: {
-    orderItems: {
-      include: {
-        product: true;
-      };
-    };
-    user: true;
-    payment: true;
-  };
-}>;
 
 @Injectable()
 export class FindOneOrderResponseInterceptor implements NestInterceptor {
