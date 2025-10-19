@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 import { IsEntity } from 'common/decorators/is-entity.decorator';
 import { IdDto } from 'common/dtos/id.dto';
-import { idDtoIdentifier } from 'common/utils/id.util';
+import { IdentifierFn } from 'common/utils/id.util';
 
 export class CreateProductDto {
   @Length(2, 50)
@@ -23,7 +23,7 @@ export class CreateProductDto {
   readonly price?: number;
 
   @ArrayNotEmpty()
-  @ArrayUnique(idDtoIdentifier)
+  @ArrayUnique(IdentifierFn.ID_DTO)
   @IsEntity()
   readonly categories?: IdDto[];
 }
